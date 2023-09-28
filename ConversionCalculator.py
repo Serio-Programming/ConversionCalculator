@@ -19,6 +19,7 @@ screen_height = pyautogui.size()[1]
 # https://en.wikipedia.org/wiki/List_of_conversion_factors
 # Length units dictionary
 lengthdict = {
+    "Ångström (Å)": .0000000001,
     "Astronomical Units (au)": 149597870700,
     "Attometers (am)": 0.000000000000000001,
     "Cable Lengths, International": 185.2,
@@ -40,7 +41,7 @@ lengthdict = {
     "Millimeters (mm)": 0.001,
     "Nanometers (nm)": 0.000000001,
     "Nautical Miles, International (nmi)": 1852,
-    "Picometers, (pm)": 0.000000000001,
+    "Picometers (pm)": 0.000000000001,
     "Scandinavian Miles (mil)": 10000,
     "Spats":1000000000000,
     "Yards, International (yd)": 0.9144 
@@ -58,12 +59,15 @@ volumedict = {
 
 # Mass units dictionary
 massdict = {
+    "Bag, Coffee": 60,
+    "Bag, Portland Cement": 42.63768278,
     "Grams (g)": 0.001,
     "Graves (gv)": 1,
     "Kilograms (kg)": 1,
+    "Kip, (kip)": 453.59237,
     "Ounces, Avoirdupois (oz av)": 0.028349523125,
     "Pounds, Avoirdupois (lb av)": 0.45359237,
-    "Tonnes (t)": 1000
+    "Tonnes,MTS Unit (t)": 1000
     }
 
 # Time units dictionary
@@ -100,7 +104,7 @@ for key in timedict.keys():
     timelist.append(str(key))
 
 # Define list of unit types
-typelist = ["Length", "Volume", "Mass", "Time"]
+typelist = ["Length", "Volume", "Mass", "Time", "[Help Menu]"]
 
 # Define important functions
 # Create function to change unit variable
@@ -159,7 +163,8 @@ def changevar(unit):
         unit1 = timedict["Seconds (s)"]
 
         default2.set("Jiffies (j)")
-        unit1 = timedict["Jiffies (j)"]
+        var2 = 1 / timedict["Jiffies (j)"]
+        unit2 = timedict["Jiffies (j)"]
 
     var1 = 1.0
         
@@ -173,12 +178,12 @@ def changevar(unit):
     entry1.destroy()
     entry1 = ttk.Entry(frm)
     entry1.insert(END, str(var1))    
-    entry1.grid(column=0, row=5)
+    entry1.grid(column=0, row=5, padx = 2)
 
     entry2.destroy()
     entry2 = ttk.Entry(frm)
     entry2.insert(END, str(var2))
-    entry2.grid(column=3, row=5)
+    entry2.grid(column=3, row=5, padx = 2)
     
     root.update()
 
@@ -201,12 +206,12 @@ def calcvar():
     entry1.destroy()
     entry1 = ttk.Entry(frm)
     entry1.insert(END, str(var1))
-    entry1.grid(column=0, row=5)
+    entry1.grid(column=0, row=5, padx = 2)
 
     entry2.destroy()
     entry2 = ttk.Entry(frm)
     entry2.insert(END, str(var2))
-    entry2.grid(column=3, row=5)
+    entry2.grid(column=3, row=5, padx = 2)
     root.update()
 
 def callback1(selection):
@@ -268,85 +273,6 @@ def callback(selection, unitnumber):
             unit2 = timedict[selection]
     calcvar()
 
-def callback3(selection):
-    global gunit
-    global default1
-    global default2
-    global unitlist
-    global omenu1
-    global omenu2
-    global var1
-    global var2
-    global entry1
-    global entry2
-    global unit1
-    global unit2
-    gunit = selection
-
-    default1 = StringVar(frm)
-    default2 = StringVar(frm)
-
-    if gunit == "Length":
-        unitlist = lengthlist
-        
-        default1.set("Meters (m)")
-        unit1 = lengthdict["Meters (m)"]
-
-        default2.set("Inches, International (in)")
-        var2 = 1 / lengthdict["Inches, International (in)"]
-        unit2 = lengthdict["Inches, International (in)"]
-
-    elif gunit == "Volume":
-        unitlist = volumelist
-        
-        default1.set("Cubic Meters (m^3)")
-        unit1 = volumedict["Cubic Meters (m^3)"]
-
-        default2.set("Cubic Yards (yd^3)")
-        var2 = 1 / volumedict["Cubic Yards (yd^3)"]
-        unit2 = volumedict["Cubic Yards (yd^3)"]
-        
-    elif gunit == "Mass":
-        unitlist = masslist
-        
-        default1.set("Kilograms (kg)")
-        unit1 = massdict["Kilograms (kg)"]
-
-        default2.set("Pounds, Avoirdupois (lb av)")
-        var2 = 1 / massdict["Pounds, Avoirdupois (lb av)"]
-        unit2 = massdict["Pounds, Avoirdupois (lb av)"]
-
-    else:
-        unitlist = timelist
-
-        default1.set("Seconds (s)")
-        unit1 = timedict["Seconds (s)"]
-
-        default2.set("Jiffies (j)")
-        var2 = 1 / timedict["Jiffies (j)"]
-        unit2 = timedict["Jiffies (j)"]
-
-    var1 = 1.0
-
-    omenu1.destroy()
-    omenu1 = OptionMenu(frm, default1, *unitlist, command=callback1)
-    omenu1.grid(column=1, row=5)
-    omenu2.destroy()
-    omenu2 = OptionMenu(frm, default2, *unitlist, command=callback2)
-    omenu2.grid(column=4, row=5)
-
-    entry1.destroy()
-    entry1 = ttk.Entry(frm)
-    entry1.insert(END, str(var1))    
-    entry1.grid(column=0, row=5)
-
-    entry2.destroy()
-    entry2 = ttk.Entry(frm)
-    entry2.insert(END, str(var2))
-    entry2.grid(column=3, row=5)
-    
-    root.update()
-
 def calculate():
     global entry1
     global entry2
@@ -370,19 +296,19 @@ def calculate():
     if unit1 > unit2:
         var2 = (var1 * unit1) / unit2
     elif unit1 < unit2:
-        var2 = (var1 * units1) / unit2
+        var2 = (var1 * unit1) / unit2
     else:
         var2 = (unit1 * var1) / unit2
         
     entry1.destroy()
     entry1 = ttk.Entry(frm)
     entry1.insert(END, str(var1))
-    entry1.grid(column=0, row=5)
+    entry1.grid(column=0, row=5, padx = 2)
 
     entry2.destroy()
     entry2 = ttk.Entry(frm)
     entry2.insert(END, str(var2))
-    entry2.grid(column=3, row=5)
+    entry2.grid(column=3, row=5, padx = 2)
     root.update()
     
 # Define first unit for conversion
@@ -396,11 +322,11 @@ unitlist = lengthlist
 unitlist = unitlist
 root = Tk()
 root.geometry("+" + str(int(0.1 * screen_width)) + "+" + str(int(0.2 * screen_height)))
+root.resizable(False, False)
 root.title("ConversionCalculator")
 imagename = "icons8-weight-90.png"
 image = PhotoImage(file = imagename)
 root.iconphoto(False, image)
-frm1 = ttk.Frame(root, padding=5)
 frm = ttk.Frame(root, padding=5)
 frm2 = ttk.Frame(root, padding=5)
 
@@ -417,9 +343,8 @@ default3.set("Length")
 # Call grid method for frames
 frm.grid()
 frm2.grid()
-frm1.grid()
 
-ttk.Label(frm, text=f" ").grid(column=1, row=4)
+#ttk.Label(frm, text=f" ").grid(column=1, row=4)
 entry1 = ttk.Entry(frm)
 entry1.insert(END, var1)
 entry1.grid(column=0, row=5, padx = 2)
@@ -434,6 +359,6 @@ omenu2 = OptionMenu(frm, default2, *unitlist, command=callback2) # trace the var
 omenu2.grid(column=4, row=5, padx = 2)
 calcbtt = ttk.Button(frm2, text="Calculate", command=calculate)
 calcbtt.grid(column=1, row=7, pady = 3)
-omenu3 = OptionMenu(frm2, default3, *typelist, command=callback3)
+omenu3 = OptionMenu(frm2, default3, *typelist, command=changevar)
 omenu3.grid(column=2, row=7, pady = 3)
 root.mainloop()
