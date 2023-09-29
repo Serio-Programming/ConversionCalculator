@@ -61,13 +61,18 @@ volumedict = {
 massdict = {
     "Bag, Coffee": 60,
     "Bag, Portland Cement": 42.63768278,
+    "Carat, Metric (ct)": 0.0002,
     "Grams (g)": 0.001,
     "Graves (gv)": 1,
     "Kilograms (kg)": 1,
     "Kip, (kip)": 453.59237,
+    "Mite": 0.00005,
     "Ounces, Avoirdupois (oz av)": 0.028349523125,
     "Pounds, Avoirdupois (lb av)": 0.45359237,
-    "Tonnes,MTS Unit (t)": 1000
+    "Quintal, Metric (q)": 100,
+    "Scruple, Apothecary (s ap)": 0.0012959782,
+    "Tonnes,MTS Unit (t)": 1000,
+    "Wey": 114.30527724
     }
 
 # Time units dictionary
@@ -75,7 +80,7 @@ timedict = {
     "Days (d)": 86400,
     "Hours (h)": 3600,
     "Jiffies (j)": 1/60,
-    "Jiffies, Alternative (ja)": 1/100,
+    "Jiffies, Alternative (ja)": 0.01,
     "Minutes (min)": 60,
     "Moments": 90,
     "Seconds (s)": 1,
@@ -123,10 +128,10 @@ def changevar(unit):
     global unit2
     gunit = unit
     
-    default1 = StringVar(frm)
-    default2 = StringVar(frm)
+    if gunit == "[Help Menu]":
+        return        
 
-    if gunit == "Length":
+    elif gunit == "Length":
         unitlist = lengthlist
                 
         default1.set("Meters (m)")
@@ -166,8 +171,7 @@ def changevar(unit):
         var2 = 1 / timedict["Jiffies (j)"]
         unit2 = timedict["Jiffies (j)"]
 
-    var1 = 1.0
-        
+    var1 = 1.0        
     omenu1.destroy()
     omenu1 = OptionMenu(frm, default1, *unitlist, command=callback1)
     omenu1.grid(column=1, row=5)
@@ -320,6 +324,8 @@ unit2 = 0.0254
 uselection2 = "Inches, International (in)"
 unitlist = lengthlist
 unitlist = unitlist
+
+# Define the root window
 root = Tk()
 root.geometry("+" + str(int(0.1 * screen_width)) + "+" + str(int(0.2 * screen_height)))
 root.resizable(False, False)
@@ -330,6 +336,10 @@ root.iconphoto(False, image)
 frm = ttk.Frame(root, padding=5)
 frm2 = ttk.Frame(root, padding=5)
 
+# Call grid method for frames
+frm.grid()
+frm2.grid()
+
 # Set default selection for the options menus
 default1 = StringVar(frm)
 default1.set("Meters (m)")
@@ -339,10 +349,6 @@ default2.set("Inches, International (in)")
 
 default3 = StringVar(frm2)
 default3.set("Length")
-
-# Call grid method for frames
-frm.grid()
-frm2.grid()
 
 #ttk.Label(frm, text=f" ").grid(column=1, row=4)
 entry1 = ttk.Entry(frm)
@@ -362,3 +368,4 @@ calcbtt.grid(column=1, row=7, pady = 3)
 omenu3 = OptionMenu(frm2, default3, *typelist, command=changevar)
 omenu3.grid(column=2, row=7, pady = 3)
 root.mainloop()
+
