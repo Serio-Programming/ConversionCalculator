@@ -98,6 +98,21 @@ freqdict = {
     "Revolutions per Minute (rpm)": 1/60
     }
 
+# Temperature units dictionary
+tempdict = {
+    "Degrees Celsius(°C)": "x - 273.15",
+    #"Degrees Delisle(°De)": "",
+    #"Degrees Fahrenheit (°F)": "",
+    #"Degrees Newton (°N)": "",
+    "Degrees Rankine (°R)": "x/(5/9)",
+    #"Degrees Réaumur (°Ré)": "",
+    #"Degrees Rømer (°Rø)": ,
+    #"Regulo Gas Marks (GM)": "",
+    "Kelvins (K)": "x"
+    }
+    #x = 10
+    #print(eval(tempdict["Degrees Celsius(°C)"]))
+
 # Define unit lists from dictionary keys
 # Define Length unit list
 lengthlist = []
@@ -124,8 +139,13 @@ freqlist = []
 for key in freqdict.keys():
     freqlist.append(str(key))
 
+# Define Temperature unit list
+templist = []
+for key in tempdict.keys():
+    templist.append(str(key))
+
 # Define list of unit types
-typelist = ["Length", "Volume", "Mass", "Time", "Frequency", "[Help Menu]"]
+typelist = ["Length", "Volume", "Mass", "Time", "Frequency", "Temperature", "[Help Menu]"]
 
 # Define important functions
 # Create function to change unit variable
@@ -143,7 +163,6 @@ def changevar(unit):
     global unit1
     global unit2
     gunit = unit
-    print(gunit)
     
     if gunit == "[Help Menu]":
         return        
@@ -188,7 +207,7 @@ def changevar(unit):
         var2 = 1 / timedict["Jiffies (j)"]
         unit2 = timedict["Jiffies (j)"]
 
-    else:
+    elif gunit == "Frequency":
         unitlist = freqlist
 
         default1.set("Hertz (Hz)")
@@ -197,6 +216,17 @@ def changevar(unit):
         default2.set("Actions per Minute (APM)")
         var2 = 1 / freqdict["Actions per Minute (APM)"]
         unit2 = freqdict["Actions per Minute (APM)"]
+
+    else:
+        unitlist = templist
+
+        default1.set("Kelvins (K)")
+        unit1 = tempdict["Kelvins (K)"]
+
+        default2.set("Degrees Celsius(°C)")
+        x = 1
+        var2 = eval(tempdict["Degrees Celsius(°C)"])
+        unit2 = tempdict["Degrees Celsius(°C)"]
 
     var1 = 1.0        
     omenu1.destroy()
@@ -225,14 +255,14 @@ def calcvar():
     global var2
     global entry1
     global entry2
+    
     var1 = float(entry1.get())
-        
-    if unit1 > unit2:
-        var2 = (var1 * unit1) / unit2
-    elif unit1 < unit2:
-        var2 = (var1 * unit1) / unit2
+
+    if gunit == "Temperature":
+        x = var1
+        var2 = eval(unit2)
     else:
-        var2 = (unit1 * var1) / unit2
+        var2 = (var1 * unit1) / unit2
         
     entry1.destroy()
     entry1 = ttk.Entry(frm)
@@ -250,16 +280,25 @@ def callback1(selection):
     global gunit
     global uselection1
     uselection1 = selection
+    
     if gunit == "Length":
         unit1 = lengthdict[selection]
+        
     elif gunit == "Volume":
         unit1 = volumedict[selection]
+        
     elif gunit == "Mass":
         unit1 = massdict[selection]
+        
     elif gunit == "Time":
         unit1 = timedict[selection]
-    else:
+        
+    elif gunit == "Frequency":
         unit1 = freqdict[selection]
+        
+    else:
+        unit1 = tempdict[selection]
+        
     calcvar()
 
 def callback2(selection):
@@ -275,8 +314,10 @@ def callback2(selection):
         unit2 = massdict[selection]
     elif gunit == "Time":
         unit2 = timedict[selection]
-    else:
+    elif gunit == "Frequency":
         unit2 = freqdict[selection]
+    else:
+        unit2 = tempdict[selection]
     calcvar()
 
 def calculate():
@@ -286,15 +327,15 @@ def calculate():
     global unit2
     global var1
     global var2
+    
     var1 = float(entry1.get())
 
-    if unit1 > unit2:
-        var2 = (var1 * unit1) / unit2
-    elif unit1 < unit2:
-        var2 = (var1 * unit1) / unit2
+    if gunit == "Temperature":
+        x = var1
+        var2 = eval(unit2)
     else:
-        var2 = (unit1 * var1) / unit2
-        
+        var2 = (var1 * unit1) / unit2
+      
     entry1.destroy()
     entry1 = ttk.Entry(frm)
     entry1.insert(END, str(var1))
@@ -304,6 +345,7 @@ def calculate():
     entry2 = ttk.Entry(frm)
     entry2.insert(END, str(var2))
     entry2.grid(column=3, row=5, padx = 2)
+    
     root.update()
 
 # Get monitor dimensions
@@ -335,7 +377,7 @@ uselection2 = "Inches, International (in)"
 unitlist = lengthlist
 unitlist = unitlist
 
-# Set default selection for the options menus
+# Set default selections for the options menus
 default1 = StringVar(frm)
 default1.set("Meters (m)")
 
@@ -345,20 +387,28 @@ default2.set("Inches, International (in)")
 default3 = StringVar(frm2)
 default3.set("Length")
 
+# Define the entry forms, buttons, and menus
 entry1 = ttk.Entry(frm)
 entry1.insert(END, var1)
 entry1.grid(column=0, row=5, padx = 2)
+
 omenu1 = OptionMenu(frm, default1, *unitlist, command=callback1) # trace the variable
 omenu1.grid(column=1, row=5, padx = 2)
+
 islabel = ttk.Label(frm, text=f"is equal to ")
 islabel.grid(column=2, row=5, padx = 2)
+
 entry2 = ttk.Entry(frm)
 entry2.insert(END, str(var2))
 entry2.grid(column=3, row=5, padx = 2)
+
 omenu2 = OptionMenu(frm, default2, *unitlist, command=callback2) # trace the variable
 omenu2.grid(column=4, row=5, padx = 2)
+
 calcbtt = ttk.Button(frm2, text="Calculate", command=calculate)
 calcbtt.grid(column=1, row=7, pady = 3)
+
 omenu3 = OptionMenu(frm2, default3, *typelist, command=changevar)
 omenu3.grid(column=2, row=7, pady = 3)
+
 root.mainloop()
