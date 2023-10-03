@@ -113,6 +113,18 @@ tempdict = {
     #x = 10
     #print(eval(tempdict["Degrees Celsius(°C)"]))
 
+# Information entropy units dictionary
+infoendict = {
+    "Bits (b)": 1,
+    "Bytes (B)": 8,
+    #"Hartley; Ban (Hart; ban)": ,
+    #"Natural Unit of Information; Nit; Nepit (nat)": ,
+    "Nibbles": 4,
+    "Kilobytes (kB)": 8000,
+    "Kibibytes (Kib)": 8192,
+    "Shannons (Sh)": 1
+    }
+
 # Define unit lists from dictionary keys
 # Define Length unit list
 lengthlist = []
@@ -144,8 +156,13 @@ templist = []
 for key in tempdict.keys():
     templist.append(str(key))
 
+# Define Information Entropy unit list
+infoenlist = []
+for key in infoendict.keys():
+    infoenlist.append(str(key))
+
 # Define list of unit types
-typelist = ["Length", "Volume", "Mass", "Time", "Frequency", "Temperature", "[Help Menu]"]
+typelist = ["Length", "Volume", "Mass", "Time", "Frequency", "Temperature", "Information Entropy", "[Help Menu]"]
 
 # Define important functions
 # Create function to change unit variable
@@ -217,7 +234,7 @@ def changevar(unit):
         var2 = 1 / freqdict["Actions per Minute (APM)"]
         unit2 = freqdict["Actions per Minute (APM)"]
 
-    else:
+    elif gunit == "Temperature":
         unitlist = templist
 
         default1.set("Kelvins (K)")
@@ -228,21 +245,35 @@ def changevar(unit):
         var2 = eval(tempdict["Degrees Celsius(°C)"])
         unit2 = tempdict["Degrees Celsius(°C)"]
 
-    var1 = 1.0        
+    else:
+        unitlist = infoenlist
+
+        default1.set("Bits (b)")
+        unit1 = infoendict["Bits (b)"]
+
+        default2.set("Bytes (B)")
+        var2 = 1 / infoendict["Bytes (B)"]
+        unit2 = infoendict["Bytes (B)"]
+        
+    var1 = 1.0
+    
     omenu1.destroy()
     omenu1 = OptionMenu(frm, default1, *unitlist, command=callback1)
-    omenu1.grid(column=1, row=5)
+    omenu1.config(width=30)
+    omenu1.grid(column=1, row=5, padx = 2)
+    
     omenu2.destroy()
     omenu2 = OptionMenu(frm, default2, *unitlist, command=callback2)
-    omenu2.grid(column=4, row=5)
+    omenu2.config(width=30)
+    omenu2.grid(column=4, row=5, padx = 2)
 
     entry1.destroy()
-    entry1 = ttk.Entry(frm)
+    entry1 = ttk.Entry(frm, width=25)
     entry1.insert(END, str(var1))    
     entry1.grid(column=0, row=5, padx = 2)
 
     entry2.destroy()
-    entry2 = ttk.Entry(frm)
+    entry2 = ttk.Entry(frm, width=25)
     entry2.insert(END, str(var2))
     entry2.grid(column=3, row=5, padx = 2)
     
@@ -265,14 +296,42 @@ def calcvar():
         var2 = (var1 * unit1) / unit2
         
     entry1.destroy()
-    entry1 = ttk.Entry(frm)
+    entry1 = ttk.Entry(frm, width=25)
     entry1.insert(END, str(var1))
     entry1.grid(column=0, row=5, padx = 2)
 
     entry2.destroy()
-    entry2 = ttk.Entry(frm)
+    entry2 = ttk.Entry(frm, width=25)
     entry2.insert(END, str(var2))
     entry2.grid(column=3, row=5, padx = 2)
+    root.update()
+
+def calculate():
+    global entry1
+    global entry2
+    global unit1
+    global unit2
+    global var1
+    global var2
+    
+    var1 = float(entry1.get())
+
+    if gunit == "Temperature":
+        x = var1
+        var2 = eval(unit2)
+    else:
+        var2 = (var1 * unit1) / unit2
+      
+    entry1.destroy()
+    entry1 = ttk.Entry(frm, width=25)
+    entry1.insert(END, str(var1))
+    entry1.grid(column=0, row=5, padx = 2)
+
+    entry2.destroy()
+    entry2 = ttk.Entry(frm, width=25)
+    entry2.insert(END, str(var2))
+    entry2.grid(column=3, row=5, padx = 2)
+    
     root.update()
 
 def callback1(selection):
@@ -296,9 +355,11 @@ def callback1(selection):
     elif gunit == "Frequency":
         unit1 = freqdict[selection]
         
-    else:
+    elif gunit == "Temperature":
         unit1 = tempdict[selection]
         
+    else:
+        unit1 = infoendict[selection]
     calcvar()
 
 def callback2(selection):
@@ -306,47 +367,28 @@ def callback2(selection):
     global gunit
     global uselection2
     uselection2 = selection
+    
     if gunit == "Length":
         unit2 = lengthdict[selection]
+        
     elif gunit == "Volume":
         unit2 = volumedict[selection]
+        
     elif gunit == "Mass":
         unit2 = massdict[selection]
+        
     elif gunit == "Time":
         unit2 = timedict[selection]
+        
     elif gunit == "Frequency":
         unit2 = freqdict[selection]
-    else:
+        
+    elif gunit == "Temperature":
         unit2 = tempdict[selection]
-    calcvar()
-
-def calculate():
-    global entry1
-    global entry2
-    global unit1
-    global unit2
-    global var1
-    global var2
-    
-    var1 = float(entry1.get())
-
-    if gunit == "Temperature":
-        x = var1
-        var2 = eval(unit2)
+        
     else:
-        var2 = (var1 * unit1) / unit2
-      
-    entry1.destroy()
-    entry1 = ttk.Entry(frm)
-    entry1.insert(END, str(var1))
-    entry1.grid(column=0, row=5, padx = 2)
-
-    entry2.destroy()
-    entry2 = ttk.Entry(frm)
-    entry2.insert(END, str(var2))
-    entry2.grid(column=3, row=5, padx = 2)
-    
-    root.update()
+        unit2 = infoendict[selection]
+    calcvar()
 
 # Get monitor dimensions
 screen_width = pyautogui.size()[0]
@@ -388,21 +430,23 @@ default3 = StringVar(frm2)
 default3.set("Length")
 
 # Define the entry forms, buttons, and menus
-entry1 = ttk.Entry(frm)
+entry1 = ttk.Entry(frm, width=25)
 entry1.insert(END, var1)
 entry1.grid(column=0, row=5, padx = 2)
 
-omenu1 = OptionMenu(frm, default1, *unitlist, command=callback1) # trace the variable
+omenu1 = OptionMenu(frm, default1, *unitlist, command=callback1)
+omenu1.config(width=30)
 omenu1.grid(column=1, row=5, padx = 2)
 
 islabel = ttk.Label(frm, text=f"is equal to ")
 islabel.grid(column=2, row=5, padx = 2)
 
-entry2 = ttk.Entry(frm)
+entry2 = ttk.Entry(frm, width=25)
 entry2.insert(END, str(var2))
 entry2.grid(column=3, row=5, padx = 2)
 
-omenu2 = OptionMenu(frm, default2, *unitlist, command=callback2) # trace the variable
+omenu2 = OptionMenu(frm, default2, *unitlist, command=callback2)
+omenu2.config(width=30)
 omenu2.grid(column=4, row=5, padx = 2)
 
 calcbtt = ttk.Button(frm2, text="Calculate", command=calculate)
