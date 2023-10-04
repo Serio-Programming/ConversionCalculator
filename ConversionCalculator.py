@@ -1,9 +1,9 @@
-# ConversionCalculator
+# ConversionCalculator (v1.6.1)
 # Python 3.9.6
 # A program by Tyler Serio
 # This program converts units to other units
 
-# Import
+# Import packages
 import tkinter
 import pyautogui
 from tkinter import *
@@ -12,6 +12,18 @@ from tkinter import messagebox
 
 # Define important unit dictionaries in terms of SI units
 # https://en.wikipedia.org/wiki/List_of_conversion_factors
+# Unit type dictionary
+typedict = {
+    "Length": "lengthdict",
+    "Volume": "volumedict",
+    "Mass": "massdict",
+    "Time": "timedict",
+    "Frequency": "freqdict",
+    "Temperature": "tempdict",
+    "Information Entropy": "infoendict",
+    "Acceleration": "acceldict"
+    }
+
 # Length units dictionary
 lengthdict = {
     "Ångströms (Å)": .0000000001,
@@ -125,6 +137,22 @@ infoendict = {
     "Shannons (Sh)": 1
     }
 
+# Acceleration units dictionary
+acceldict = {
+    "Feet per Hour per Second (fph/s)": 0.000084666666,
+    "Feet per Minute per Second (fpm/s)": 0.00508,
+    "Feet per Second Squared (fps^2)": 0.3048,
+    "Gals, Galileos (Gal)": .01,
+    "Inches per Minute per Second (ipm/s)": 0.00042333333,
+    "Inches per Second Squared (ips^2)": 0.0254,
+    #"Knots per Second (kn/s)": ,
+    "Meters per Second Squared (m/s^2)": 1,
+    "Miles per Hour per Second (mph/s)": 0.44704,
+    "Miles per Minute per Second (mpm/s)": 26.8224,
+    "Miles per Second Squared (mps^2)": 1609.344,
+    "Standard Gravitational Acceleration (g0)": 9.80665
+    }
+
 # Define unit lists from dictionary keys
 # Define Length unit list
 lengthlist = []
@@ -161,8 +189,20 @@ infoenlist = []
 for key in infoendict.keys():
     infoenlist.append(str(key))
 
+# Define Acceleration unit list
+accellist = []
+for key in acceldict.keys():
+    accellist.append(str(key))
+
 # Define list of unit types
-typelist = ["Length", "Volume", "Mass", "Time", "Frequency", "Temperature", "Information Entropy", "[Help Menu]"]
+typelist = []
+for key in typedict.keys():
+    typelist.append(str(key))
+typelist.append("[Help Menu]")
+typelist.append("[Exit]")
+
+### Note ###
+# automatic generation of lists is possible
 
 # Define important functions
 # Create function to change unit variable
@@ -180,8 +220,11 @@ def changevar(unit):
     global unit1
     global unit2
     gunit = unit
+
+    if gunit == "[Exit]":
+        exit()
     
-    if gunit == "[Help Menu]":
+    elif gunit == "[Help Menu]":
         return        
 
     elif gunit == "Length":
@@ -245,7 +288,7 @@ def changevar(unit):
         var2 = eval(tempdict["Degrees Celsius(°C)"])
         unit2 = tempdict["Degrees Celsius(°C)"]
 
-    else:
+    elif gunit == "Information Entropy":
         unitlist = infoenlist
 
         default1.set("Bits (b)")
@@ -254,6 +297,16 @@ def changevar(unit):
         default2.set("Bytes (B)")
         var2 = 1 / infoendict["Bytes (B)"]
         unit2 = infoendict["Bytes (B)"]
+
+    else:
+        unitlist = accellist
+
+        default1.set("Meters per Second Squared (m/s^2)")
+        unit1 = acceldict["Meters per Second Squared (m/s^2)"]
+
+        default2.set("Gals, Galileos (Gal)")
+        var2 = 1 / acceldict["Gals, Galileos (Gal)"]
+        unit2 = acceldict["Gals, Galileos (Gal)"]
         
     var1 = 1.0
     
@@ -267,17 +320,7 @@ def changevar(unit):
     omenu2.config(width=30)
     omenu2.grid(column=4, row=5, padx = 2)
 
-    entry1.destroy()
-    entry1 = ttk.Entry(frm, width=25)
-    entry1.insert(END, str(var1))    
-    entry1.grid(column=0, row=5, padx = 2)
-
-    entry2.destroy()
-    entry2 = ttk.Entry(frm, width=25)
-    entry2.insert(END, str(var2))
-    entry2.grid(column=3, row=5, padx = 2)
-    
-    root.update()
+    replaceentries(var1, var2)
 
 def calcvar():
     global unit1
@@ -295,16 +338,7 @@ def calcvar():
     else:
         var2 = (var1 * unit1) / unit2
         
-    entry1.destroy()
-    entry1 = ttk.Entry(frm, width=25)
-    entry1.insert(END, str(var1))
-    entry1.grid(column=0, row=5, padx = 2)
-
-    entry2.destroy()
-    entry2 = ttk.Entry(frm, width=25)
-    entry2.insert(END, str(var2))
-    entry2.grid(column=3, row=5, padx = 2)
-    root.update()
+    replaceentries(var1, var2)
 
 def calculate():
     global entry1
@@ -321,15 +355,21 @@ def calculate():
         var2 = eval(unit2)
     else:
         var2 = (var1 * unit1) / unit2
-      
+
+    replaceentries(var1, var2)
+
+def replaceentries(varone, vartwo):
+    global entry1
+    global entry2
+    
     entry1.destroy()
     entry1 = ttk.Entry(frm, width=25)
-    entry1.insert(END, str(var1))
+    entry1.insert(END, str(varone))
     entry1.grid(column=0, row=5, padx = 2)
 
     entry2.destroy()
     entry2 = ttk.Entry(frm, width=25)
-    entry2.insert(END, str(var2))
+    entry2.insert(END, str(vartwo))
     entry2.grid(column=3, row=5, padx = 2)
     
     root.update()
@@ -339,27 +379,9 @@ def callback1(selection):
     global gunit
     global uselection1
     uselection1 = selection
-    
-    if gunit == "Length":
-        unit1 = lengthdict[selection]
-        
-    elif gunit == "Volume":
-        unit1 = volumedict[selection]
-        
-    elif gunit == "Mass":
-        unit1 = massdict[selection]
-        
-    elif gunit == "Time":
-        unit1 = timedict[selection]
-        
-    elif gunit == "Frequency":
-        unit1 = freqdict[selection]
-        
-    elif gunit == "Temperature":
-        unit1 = tempdict[selection]
-        
-    else:
-        unit1 = infoendict[selection]
+
+    xdict = eval(typedict[gunit])
+    unit1 = xdict[selection]
     calcvar()
 
 def callback2(selection):
@@ -368,26 +390,8 @@ def callback2(selection):
     global uselection2
     uselection2 = selection
     
-    if gunit == "Length":
-        unit2 = lengthdict[selection]
-        
-    elif gunit == "Volume":
-        unit2 = volumedict[selection]
-        
-    elif gunit == "Mass":
-        unit2 = massdict[selection]
-        
-    elif gunit == "Time":
-        unit2 = timedict[selection]
-        
-    elif gunit == "Frequency":
-        unit2 = freqdict[selection]
-        
-    elif gunit == "Temperature":
-        unit2 = tempdict[selection]
-        
-    else:
-        unit2 = infoendict[selection]
+    xdict = eval(typedict[gunit])
+    unit2 = xdict[selection]
     calcvar()
 
 # Get monitor dimensions
@@ -398,7 +402,7 @@ screen_height = pyautogui.size()[1]
 root = Tk()
 root.geometry("+" + str(int(0.1 * screen_width)) + "+" + str(int(0.2 * screen_height)))
 root.resizable(False, False)
-root.title("ConversionCalculator")
+root.title("ConversionCalculator (v1.6.1)")
 imagename = "icons8-weight-90.png"
 image = PhotoImage(file = imagename)
 root.iconphoto(False, image)
@@ -429,30 +433,37 @@ default2.set("Inches, International (in)")
 default3 = StringVar(frm2)
 default3.set("Length")
 
-# Define the entry forms, buttons, and menus
+# Define first entry for number of units
 entry1 = ttk.Entry(frm, width=25)
 entry1.insert(END, var1)
 entry1.grid(column=0, row=5, padx = 2)
 
+# Define the first option menu for choosing conversion units
 omenu1 = OptionMenu(frm, default1, *unitlist, command=callback1)
 omenu1.config(width=30)
 omenu1.grid(column=1, row=5, padx = 2)
 
+# Define label to aid in understanding of unit conversion
 islabel = ttk.Label(frm, text=f"is equal to ")
 islabel.grid(column=2, row=5, padx = 2)
 
+# Define second entry for number of units
 entry2 = ttk.Entry(frm, width=25)
 entry2.insert(END, str(var2))
 entry2.grid(column=3, row=5, padx = 2)
 
+# Define the second option menu for choosing conversion units
 omenu2 = OptionMenu(frm, default2, *unitlist, command=callback2)
 omenu2.config(width=30)
 omenu2.grid(column=4, row=5, padx = 2)
 
+# Define the calculate button
 calcbtt = ttk.Button(frm2, text="Calculate", command=calculate)
 calcbtt.grid(column=1, row=7, pady = 3)
 
+# Define the option menu for selecting unit types
 omenu3 = OptionMenu(frm2, default3, *typelist, command=changevar)
 omenu3.grid(column=2, row=7, pady = 3)
 
+# Mainloop
 root.mainloop()
