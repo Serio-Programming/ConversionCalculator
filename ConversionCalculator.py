@@ -1,4 +1,4 @@
-# ConversionCalculator (v1.6.1)
+# ConversionCalculator (v1.7.1)
 # Python 3.9.6
 # A program by Tyler Serio
 # This program converts units to other units
@@ -14,14 +14,69 @@ from tkinter import messagebox
 # https://en.wikipedia.org/wiki/List_of_conversion_factors
 # Unit type dictionary
 typedict = {
-    "Length": "lengthdict",
-    "Volume": "volumedict",
-    "Mass": "massdict",
-    "Time": "timedict",
+    "Acceleration": "acceldict",
+    "Force": "forcedict",
     "Frequency": "freqdict",
-    "Temperature": "tempdict",
     "Information Entropy": "infoendict",
-    "Acceleration": "acceldict"
+    "Length": "lengthdict",
+    "Mass": "massdict",
+    "Temperature": "tempdict",
+    "Time": "timedict",
+    "Volume": "volumedict"
+    }
+
+# Acceleration units dictionary
+acceldict = {
+    "Feet per Hour per Second (fph/s)": 0.000084666666,
+    "Feet per Minute per Second (fpm/s)": 0.00508,
+    "Feet per Second Squared (fps^2)": 0.3048,
+    "Gals, Galileos (Gal)": .01,
+    "Inches per Minute per Second (ipm/s)": 0.00042333333,
+    "Inches per Second Squared (ips^2)": 0.0254,
+    #"Knots per Second (kn/s)": ,
+    "Meters per Second Squared (m/s^2)": 1,
+    "Miles per Hour per Second (mph/s)": 0.44704,
+    "Miles per Minute per Second (mpm/s)": 26.8224,
+    "Miles per Second Squared (mps^2)": 1609.344,
+    "Standard Gravity (g0)": 9.80665
+    }
+
+# Frequency units dictionary
+freqdict = {
+    "Actions per Minute (APM)": 1/60,
+    "Cycles per Second (cps)": 1,
+    "Degrees per Second (deg/s)": 0.00277777,
+    "Hertz (Hz)": 1,
+    "Radians per Second (rad/s)": 0.159155,
+    "Revolutions per Minute (rpm)": 1/60
+    }
+
+### Force units dictionary
+##forcedict = {
+##    "Atomic Unit of Force": ,
+##    " (dyn)": ,
+##    " (kgf; kp; gvf)": ,
+##    " (kip; kipf; klbf)": ,
+##    " (	mgvf; gvtf)": ,
+##    " (tnf)": ,
+##    "Newtons (N)": 1,
+##    " (ozf)": ,
+##    " (lbf)": ,
+##    " (pdl)": ,
+##    " (tnf)": ,
+##    "Sthene (sn)": 
+##    }
+
+# Information entropy units dictionary
+infoendict = {
+    "Bits (b)": 1,
+    "Bytes (B)": 8,
+    #"Hartley; Ban (Hart; ban)": ,
+    #"Natural Unit of Information; Nit; Nepit (nat)": ,
+    "Nibbles": 4,
+    "Kilobytes (kB)": 8000,
+    "Kibibytes (Kib)": 8192,
+    "Shannons (Sh)": 1
     }
 
 # Length units dictionary
@@ -54,14 +109,33 @@ lengthdict = {
     "Yards, International (yd)": 0.9144 
     }
 
-# Volume units dictionary
-volumedict = {
-    "Cubic Meters (m^3)": 1,
-    "Cubic Miles (cu mi)": 4168181825.440579584,
-    "Cubic Yards (yd^3)": 0.764554857984,
-    "Cups, Metric (c)": 0.00025,
-    "Liters (L)": 0.001,
-    "Petroleum Barrels, Archaic Blue-Barrels": 0.158987294928
+# Temperature units dictionary
+tempdict = {
+    "Degrees Celsius(°C)": "x - 273.15",
+    #"Degrees Delisle(°De)": "",
+    #"Degrees Fahrenheit (°F)": "",
+    #"Degrees Newton (°N)": "",
+    "Degrees Rankine (°R)": "x/(5/9)",
+    #"Degrees Réaumur (°Ré)": "",
+    #"Degrees Rømer (°Rø)": ,
+    #"Regulo Gas Marks (GM)": "",
+    "Kelvins (K)": "x"
+    }
+    #x = 10
+    #print(eval(tempdict["Degrees Celsius(°C)"]))
+
+# Time units dictionary
+timedict = {
+    "Days (d)": 86400,
+    "Hours (h)": 3600,
+    "Jiffies (j)": 1/60,
+    "Jiffies, Alternative (ja)": 0.01,
+    "Millenniums": 31536000000,
+    "Minutes (min)": 60,
+    "Moments": 90,
+    "Seconds (s)": 1,
+    "Weeks (wk)": 604800,
+    "Years, Common (y)": 31536000
     }
 
 # Mass units dictionary
@@ -86,71 +160,14 @@ massdict = {
     "Weys": 114.30527724
     }
 
-# Time units dictionary
-timedict = {
-    "Days (d)": 86400,
-    "Hours (h)": 3600,
-    "Jiffies (j)": 1/60,
-    "Jiffies, Alternative (ja)": 0.01,
-    "Millenniums": 31536000000,
-    "Minutes (min)": 60,
-    "Moments": 90,
-    "Seconds (s)": 1,
-    "Weeks (wk)": 604800,
-    "Years, Common (y)": 31536000
-    }
-
-# Frequency units dictionary
-freqdict = {
-    "Actions per Minute (APM)": 1/60,
-    "Cycles per Second (cps)": 1,
-    "Degrees per Second (deg/s)": 0.00277777,
-    "Hertz (Hz)": 1,
-    "Radians per Second (rad/s)": 0.159155,
-    "Revolutions per Minute (rpm)": 1/60
-    }
-
-# Temperature units dictionary
-tempdict = {
-    "Degrees Celsius(°C)": "x - 273.15",
-    #"Degrees Delisle(°De)": "",
-    #"Degrees Fahrenheit (°F)": "",
-    #"Degrees Newton (°N)": "",
-    "Degrees Rankine (°R)": "x/(5/9)",
-    #"Degrees Réaumur (°Ré)": "",
-    #"Degrees Rømer (°Rø)": ,
-    #"Regulo Gas Marks (GM)": "",
-    "Kelvins (K)": "x"
-    }
-    #x = 10
-    #print(eval(tempdict["Degrees Celsius(°C)"]))
-
-# Information entropy units dictionary
-infoendict = {
-    "Bits (b)": 1,
-    "Bytes (B)": 8,
-    #"Hartley; Ban (Hart; ban)": ,
-    #"Natural Unit of Information; Nit; Nepit (nat)": ,
-    "Nibbles": 4,
-    "Kilobytes (kB)": 8000,
-    "Kibibytes (Kib)": 8192,
-    "Shannons (Sh)": 1
-    }
-
-# Acceleration units dictionary
-acceldict = {
-    "Feet per Hour per Second (fph/s)": 0.000084666666,
-    "Feet per Minute per Second (fpm/s)": 0.00508,
-    "Feet per Second Squared (fps^2)": 0.3048,
-    "Gals, Galileos (Gal)": .01,
-    "Inches per Minute per Second (ipm/s)": 0.00042333333,
-    "Inches per Second Squared (ips^2)": 0.0254,
-    #"Knots per Second (kn/s)": ,
-    "Meters per Second Squared (m/s^2)": 1,
-    "Miles per Hour per Second (mph/s)": 0.44704,
-    "Miles per Minute per Second (mpm/s)": 26.8224,
-    "Miles per Second Squared (mps^2)": 1609.344,
-    "Standard Gravitational Acceleration (g0)": 9.80665
+# Volume units dictionary
+volumedict = {
+    "Cubic Meters (m^3)": 1,
+    "Cubic Miles (cu mi)": 4168181825.440579584,
+    "Cubic Yards (yd^3)": 0.764554857984,
+    "Cups, Metric (c)": 0.00025,
+    "Liters (L)": 0.001,
+    "Petroleum Barrels, Archaic Blue-Barrels": 0.158987294928
     }
 
 # Define unit lists from dictionary keys
@@ -193,6 +210,11 @@ for key in infoendict.keys():
 accellist = []
 for key in acceldict.keys():
     accellist.append(str(key))
+
+# Define Force unit list
+#forcelist = []
+#for key in forcedict.keys():
+#    forcelist.append(str(key))
 
 # Define list of unit types
 typelist = []
@@ -307,17 +329,27 @@ def changevar(unit):
         default2.set("Gals, Galileos (Gal)")
         var2 = 1 / acceldict["Gals, Galileos (Gal)"]
         unit2 = acceldict["Gals, Galileos (Gal)"]
+
+##    else:
+##        unitlist = forcelist
+##
+##        default1.set()
+##        unit = forcedict[]
+##
+##        default2.set()
+##        var2 =
+##        unit2 =
         
     var1 = 1.0
     
     omenu1.destroy()
     omenu1 = OptionMenu(frm, default1, *unitlist, command=callback1)
-    omenu1.config(width=30)
+    omenu1.config(width=32)
     omenu1.grid(column=1, row=5, padx = 2)
     
     omenu2.destroy()
     omenu2 = OptionMenu(frm, default2, *unitlist, command=callback2)
-    omenu2.config(width=30)
+    omenu2.config(width=32)
     omenu2.grid(column=4, row=5, padx = 2)
 
     replaceentries(var1, var2)
@@ -363,12 +395,12 @@ def replaceentries(varone, vartwo):
     global entry2
     
     entry1.destroy()
-    entry1 = ttk.Entry(frm, width=25)
+    entry1 = ttk.Entry(frm, width=24)
     entry1.insert(END, str(varone))
     entry1.grid(column=0, row=5, padx = 2)
 
     entry2.destroy()
-    entry2 = ttk.Entry(frm, width=25)
+    entry2 = ttk.Entry(frm, width=24)
     entry2.insert(END, str(vartwo))
     entry2.grid(column=3, row=5, padx = 2)
     
@@ -402,7 +434,7 @@ screen_height = pyautogui.size()[1]
 root = Tk()
 root.geometry("+" + str(int(0.1 * screen_width)) + "+" + str(int(0.2 * screen_height)))
 root.resizable(False, False)
-root.title("ConversionCalculator (v1.6.1)")
+root.title("ConversionCalculator (v1.7.1)")
 imagename = "icons8-weight-90.png"
 image = PhotoImage(file = imagename)
 root.iconphoto(False, image)
@@ -434,13 +466,13 @@ default3 = StringVar(frm2)
 default3.set("Length")
 
 # Define first entry for number of units
-entry1 = ttk.Entry(frm, width=25)
+entry1 = ttk.Entry(frm, width=24)
 entry1.insert(END, var1)
 entry1.grid(column=0, row=5, padx = 2)
 
 # Define the first option menu for choosing conversion units
 omenu1 = OptionMenu(frm, default1, *unitlist, command=callback1)
-omenu1.config(width=30)
+omenu1.config(width=32)
 omenu1.grid(column=1, row=5, padx = 2)
 
 # Define label to aid in understanding of unit conversion
@@ -448,13 +480,13 @@ islabel = ttk.Label(frm, text=f"is equal to ")
 islabel.grid(column=2, row=5, padx = 2)
 
 # Define second entry for number of units
-entry2 = ttk.Entry(frm, width=25)
+entry2 = ttk.Entry(frm, width=24)
 entry2.insert(END, str(var2))
 entry2.grid(column=3, row=5, padx = 2)
 
 # Define the second option menu for choosing conversion units
 omenu2 = OptionMenu(frm, default2, *unitlist, command=callback2)
-omenu2.config(width=30)
+omenu2.config(width=32)
 omenu2.grid(column=4, row=5, padx = 2)
 
 # Define the calculate button
