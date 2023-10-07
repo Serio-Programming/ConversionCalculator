@@ -1,4 +1,4 @@
-# ConversionCalculator (v1.8.1)
+# ConversionCalculator (v1.9.1)
 # Python 3.9.6
 # A program by Tyler Serio
 # This program converts units to other units
@@ -12,18 +12,7 @@ from tkinter import messagebox
 
 # Define important unit dictionaries in terms of SI units
 # https://en.wikipedia.org/wiki/List_of_conversion_factors
-# Unit type dictionary
-typedict = {
-    "Acceleration": "acceldict",
-    "Force": "forcedict",
-    "Frequency": "freqdict",
-    "Information Entropy": "infoendict",
-    "Length": "lengthdict",
-    "Mass": "massdict",
-    "Temperature": "tempdict",
-    "Time": "timedict",
-    "Volume": "volumedict"
-    }
+
 
 # Acceleration units dictionary
 acceldict = {
@@ -170,6 +159,19 @@ volumedict = {
     "Petroleum Barrels, Archaic Blue-Barrels": 0.158987294928
     }
 
+# Unit type dictionary
+typedict = {
+    "Acceleration": acceldict,
+    "Force": forcedict,
+    "Frequency": freqdict,
+    "Information Entropy": infoendict,
+    "Length": lengthdict,
+    "Mass": massdict,
+    "Temperature": tempdict,
+    "Time": timedict,
+    "Volume": volumedict
+    }
+
 # Define unit lists from dictionary keys
 # Define Length unit list
 lengthlist = []
@@ -250,95 +252,56 @@ def changevar(unit):
         return        
 
     elif gunit == "Length":
+        x = "Meters (m)"
+        y = "Inches, International (in)"
         unitlist = lengthlist
-                
-        default1.set("Meters (m)")
-        unit1 = lengthdict["Meters (m)"]
-
-        default2.set("Inches, International (in)")
-        var2 = 1 / lengthdict["Inches, International (in)"]
-        unit2 = lengthdict["Inches, International (in)"]
 
     elif gunit == "Volume":
+        x = "Cubic Meters (m^3)"
+        y = "Cubic Yards (yd^3)"
         unitlist = volumelist
         
-        default1.set("Cubic Meters (m^3)")
-        unit1 = volumedict["Cubic Meters (m^3)"]
-
-        default2.set("Cubic Yards (yd^3)")
-        var2 = 1 / volumedict["Cubic Yards (yd^3)"]
-        unit2 = volumedict["Cubic Yards (yd^3)"]
-        
     elif gunit == "Mass":
+        x = "Kilograms (kg)"
+        y = "Pounds, Avoirdupois (lb av)"
         unitlist = masslist
-        
-        default1.set("Kilograms (kg)")
-        unit1 = massdict["Kilograms (kg)"]
-
-        default2.set("Pounds, Avoirdupois (lb av)")
-        var2 = 1 / massdict["Pounds, Avoirdupois (lb av)"]
-        unit2 = massdict["Pounds, Avoirdupois (lb av)"]
 
     elif gunit == "Time":
+        x = "Seconds (s)"
+        y = "Jiffies (j)"
         unitlist = timelist
 
-        default1.set("Seconds (s)")
-        unit1 = timedict["Seconds (s)"]
-
-        default2.set("Jiffies (j)")
-        var2 = 1 / timedict["Jiffies (j)"]
-        unit2 = timedict["Jiffies (j)"]
-
     elif gunit == "Frequency":
+        x = "Hertz (Hz)"
+        y = "Actions per Minute (APM)"
         unitlist = freqlist
 
-        default1.set("Hertz (Hz)")
-        unit1 = freqdict["Hertz (Hz)"]
-
-        default2.set("Actions per Minute (APM)")
-        var2 = 1 / freqdict["Actions per Minute (APM)"]
-        unit2 = freqdict["Actions per Minute (APM)"]
-
     elif gunit == "Temperature":
+        x = "Kelvins (K)"
+        y = "Degrees Celsius(°C)"
         unitlist = templist
 
-        default1.set("Kelvins (K)")
-        unit1 = tempdict["Kelvins (K)"]
-
-        default2.set("Degrees Celsius(°C)")
-        x = 1
-        var2 = eval(tempdict["Degrees Celsius(°C)"])
-        unit2 = tempdict["Degrees Celsius(°C)"]
-
     elif gunit == "Information Entropy":
-        unitlist = infoenlist
-
-        default1.set("Bits (b)")
-        unit1 = infoendict["Bits (b)"]
-
-        default2.set("Bytes (B)")
-        var2 = 1 / infoendict["Bytes (B)"]
-        unit2 = infoendict["Bytes (B)"]
+        x = "Bits (b)"
+        y = "Bytes (B)"
 
     elif gunit== "Acceleration":
+        x = "Meters per Second Squared (m/s^2)"
+        y = "Gals, Galileos (Gal)"
         unitlist = accellist
 
-        default1.set("Meters per Second Squared (m/s^2)")
-        unit1 = acceldict["Meters per Second Squared (m/s^2)"]
-
-        default2.set("Gals, Galileos (Gal)")
-        var2 = 1 / acceldict["Gals, Galileos (Gal)"]
-        unit2 = acceldict["Gals, Galileos (Gal)"]
-
     else:
+        x = "Newtons (N)"
+        y = "Atomic Units of Force"
         unitlist = forcelist
+        
+    dictionary = typedict[gunit]
+    default1.set(x)
+    unit1 = dictionary[x]
 
-        default1.set("Newtons (N)")
-        unit = forcedict["Newtons (N)"]
-
-        default2.set("Atomic Units of Force")
-        var2 = 1 / forcedict["Atomic Units of Force"]
-        unit2 = forcedict["Atomic Units of Force"]
+    default2.set(y)
+    var2 = 1 / dictionary[y]
+    unit2 = dictionary[y]    
         
     var1 = 1.0
     
@@ -352,9 +315,7 @@ def changevar(unit):
     omenu2.config(width=32)
     omenu2.grid(column=4, row=5, padx = 2)
 
-    replaceentries(var1, var2)
-
-### Add a function that is fed gunit to set defaults and units
+    replaceentries(var1, var2)  
 
 def calcvar():
     global unit1
@@ -417,7 +378,7 @@ def callback1(selection):
     global uselection1
     uselection1 = selection
 
-    xdict = eval(typedict[gunit])
+    xdict = typedict[gunit]
     unit1 = xdict[selection]
     calcvar()
 
@@ -428,7 +389,7 @@ def callback2(selection):
     global uselection2
     uselection2 = selection
     
-    xdict = eval(typedict[gunit])
+    xdict = typedict[gunit]
     unit2 = xdict[selection]
     calcvar()
 
@@ -440,7 +401,7 @@ screen_height = pyautogui.size()[1]
 root = Tk()
 root.geometry("+" + str(int(0.1 * screen_width)) + "+" + str(int(0.2 * screen_height)))
 root.resizable(False, False)
-root.title("ConversionCalculator (v1.8.1)")
+root.title("ConversionCalculator (v1.9.1)")
 imagename = "icons8-weight-90.png"
 image = PhotoImage(file = imagename)
 root.iconphoto(False, image)
@@ -505,4 +466,3 @@ omenu3.grid(column=2, row=7, pady = 3)
 
 # Mainloop
 root.mainloop()
-
