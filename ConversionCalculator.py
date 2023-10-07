@@ -1,4 +1,4 @@
-# ConversionCalculator (v1.7.1)
+# ConversionCalculator (v1.8.1)
 # Python 3.9.6
 # A program by Tyler Serio
 # This program converts units to other units
@@ -51,21 +51,21 @@ freqdict = {
     "Revolutions per Minute (rpm)": 1/60
     }
 
-### Force units dictionary
-##forcedict = {
-##    "Atomic Unit of Force": ,
-##    " (dyn)": ,
-##    " (kgf; kp; gvf)": ,
-##    " (kip; kipf; klbf)": ,
-##    " (	mgvf; gvtf)": ,
-##    " (tnf)": ,
-##    "Newtons (N)": 1,
-##    " (ozf)": ,
-##    " (lbf)": ,
-##    " (pdl)": ,
-##    " (tnf)": ,
-##    "Sthene (sn)": 
-##    }
+# Force units dictionary
+forcedict = {
+    "Atomic Units of Force": 0.0000000823872206,
+    "Dynes, CGS Unit (dyn)": 0.00001,
+    #"Kilogram-Force, Kiloponds, Grave-Force (kgf; kp; gvf)": ,
+    #"Kips, Kip-Force (kip; kipf; klbf)": ,
+    #"Milligrave-Force, Gravet-Force (mgvf; gvtf)": 0.00980665,
+    "Long Tons-Force (tnf)": 9964.01641818352,
+    "Newtons (N)": 1,
+    "Ounces-Force (ozf)": 0.27801385095378125,
+    "Pounds-Force (lbf)": 4.4482216152605,
+    "Poundals (pdl)": 0.138254954376,
+    "Short Tons-Force (tnf)": 8896.443230521,
+    "Sthenes (sn)": 1000
+    }
 
 # Information entropy units dictionary
 infoendict = {
@@ -212,9 +212,9 @@ for key in acceldict.keys():
     accellist.append(str(key))
 
 # Define Force unit list
-#forcelist = []
-#for key in forcedict.keys():
-#    forcelist.append(str(key))
+forcelist = []
+for key in forcedict.keys():
+    forcelist.append(str(key))
 
 # Define list of unit types
 typelist = []
@@ -320,7 +320,7 @@ def changevar(unit):
         var2 = 1 / infoendict["Bytes (B)"]
         unit2 = infoendict["Bytes (B)"]
 
-    else:
+    elif gunit== "Acceleration":
         unitlist = accellist
 
         default1.set("Meters per Second Squared (m/s^2)")
@@ -330,15 +330,15 @@ def changevar(unit):
         var2 = 1 / acceldict["Gals, Galileos (Gal)"]
         unit2 = acceldict["Gals, Galileos (Gal)"]
 
-##    else:
-##        unitlist = forcelist
-##
-##        default1.set()
-##        unit = forcedict[]
-##
-##        default2.set()
-##        var2 =
-##        unit2 =
+    else:
+        unitlist = forcelist
+
+        default1.set("Newtons (N)")
+        unit = forcedict["Newtons (N)"]
+
+        default2.set("Atomic Units of Force")
+        var2 = 1 / forcedict["Atomic Units of Force"]
+        unit2 = forcedict["Atomic Units of Force"]
         
     var1 = 1.0
     
@@ -353,6 +353,8 @@ def changevar(unit):
     omenu2.grid(column=4, row=5, padx = 2)
 
     replaceentries(var1, var2)
+
+### Add a function that is fed gunit to set defaults and units
 
 def calcvar():
     global unit1
@@ -372,6 +374,7 @@ def calcvar():
         
     replaceentries(var1, var2)
 
+# Function that calculates unit conversion
 def calculate():
     global entry1
     global entry2
@@ -390,6 +393,7 @@ def calculate():
 
     replaceentries(var1, var2)
 
+# Function that changes entry boxes to reflect unit conversions
 def replaceentries(varone, vartwo):
     global entry1
     global entry2
@@ -406,6 +410,7 @@ def replaceentries(varone, vartwo):
     
     root.update()
 
+# Function to change first unit 
 def callback1(selection):
     global unit1
     global gunit
@@ -416,6 +421,7 @@ def callback1(selection):
     unit1 = xdict[selection]
     calcvar()
 
+# Function to change second unit
 def callback2(selection):
     global unit2
     global gunit
@@ -434,7 +440,7 @@ screen_height = pyautogui.size()[1]
 root = Tk()
 root.geometry("+" + str(int(0.1 * screen_width)) + "+" + str(int(0.2 * screen_height)))
 root.resizable(False, False)
-root.title("ConversionCalculator (v1.7.1)")
+root.title("ConversionCalculator (v1.8.1)")
 imagename = "icons8-weight-90.png"
 image = PhotoImage(file = imagename)
 root.iconphoto(False, image)
@@ -499,3 +505,4 @@ omenu3.grid(column=2, row=7, pady = 3)
 
 # Mainloop
 root.mainloop()
+
