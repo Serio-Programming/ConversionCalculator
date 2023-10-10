@@ -1,4 +1,4 @@
-# ConversionCalculator (v1.9.1)
+# ConversionCalculator (v1.10.1)
 # Python 3.9.6
 # A program by Tyler Serio
 # This program converts units to other units
@@ -12,8 +12,6 @@ from tkinter import messagebox
 
 # Define important unit dictionaries in terms of SI units
 # https://en.wikipedia.org/wiki/List_of_conversion_factors
-
-
 # Acceleration units dictionary
 acceldict = {
     "Feet per Hour per Second (fph/s)": 0.000084666666,
@@ -110,8 +108,6 @@ tempdict = {
     #"Regulo Gas Marks (GM)": "",
     "Kelvins (K)": "x"
     }
-    #x = 10
-    #print(eval(tempdict["Degrees Celsius(°C)"]))
 
 # Time units dictionary
 timedict = {
@@ -159,18 +155,12 @@ volumedict = {
     "Petroleum Barrels, Archaic Blue-Barrels": 0.158987294928
     }
 
-# Unit type dictionary
-typedict = {
-    "Acceleration": acceldict,
-    "Force": forcedict,
-    "Frequency": freqdict,
-    "Information Entropy": infoendict,
-    "Length": lengthdict,
-    "Mass": massdict,
-    "Temperature": tempdict,
-    "Time": timedict,
-    "Volume": volumedict
-    }
+# Maybe add something list this later:
+# listlist = [lengthlist, volumelist, etc.]
+# for list in listlist:
+#     list = []
+#     for key in listdict.keys():
+#     list.append(str(key))
 
 # Define unit lists from dictionary keys
 # Define Length unit list
@@ -218,15 +208,25 @@ forcelist = []
 for key in forcedict.keys():
     forcelist.append(str(key))
 
+# Unit type dictionary
+typedict = {
+    "Acceleration": [acceldict, accellist, "Meters per Second Squared (m/s^2)", "Gals, Galileos (Gal)"],
+    "Force": [forcedict, forcelist, "Newtons (N)", "Atomic Units of Force"],
+    "Frequency": [freqdict, freqlist, "Hertz (Hz)", "Actions per Minute (APM)"],
+    "Information Entropy": [infoendict, infoenlist, "Bits (b)", "Bytes (B)"],
+    "Length": [lengthdict, lengthlist, "Meters (m)", "Inches, International (in)"],
+    "Mass": [massdict, masslist, "Kilograms (kg)", "Pounds, Avoirdupois (lb av)"],
+    "Temperature": [tempdict, templist, "Kelvins (K)", "Degrees Celsius(°C)"],
+    "Time": [timedict, timelist, "Seconds (s)", "Jiffies (j)"],
+    "Volume": [volumedict, volumelist, "Cubic Meters (m^3)", "Cubic Yards (yd^3)"]
+    }
+
 # Define list of unit types
 typelist = []
 for key in typedict.keys():
     typelist.append(str(key))
 typelist.append("[Help Menu]")
 typelist.append("[Exit]")
-
-### Note ###
-# automatic generation of lists is possible
 
 # Define important functions
 # Create function to change unit variable
@@ -248,60 +248,27 @@ def changevar(unit):
     if gunit == "[Exit]":
         exit()
     
-    elif gunit == "[Help Menu]":
+    if gunit == "[Help Menu]":
         return        
 
-    elif gunit == "Length":
-        x = "Meters (m)"
-        y = "Inches, International (in)"
-        unitlist = lengthlist
-
-    elif gunit == "Volume":
-        x = "Cubic Meters (m^3)"
-        y = "Cubic Yards (yd^3)"
-        unitlist = volumelist
+    unitlist = typedict[gunit][1]
+    x = typedict[gunit][2]
+    y = typedict[gunit][3]
         
-    elif gunit == "Mass":
-        x = "Kilograms (kg)"
-        y = "Pounds, Avoirdupois (lb av)"
-        unitlist = masslist
-
-    elif gunit == "Time":
-        x = "Seconds (s)"
-        y = "Jiffies (j)"
-        unitlist = timelist
-
-    elif gunit == "Frequency":
-        x = "Hertz (Hz)"
-        y = "Actions per Minute (APM)"
-        unitlist = freqlist
-
-    elif gunit == "Temperature":
-        x = "Kelvins (K)"
-        y = "Degrees Celsius(°C)"
-        unitlist = templist
-
-    elif gunit == "Information Entropy":
-        x = "Bits (b)"
-        y = "Bytes (B)"
-
-    elif gunit== "Acceleration":
-        x = "Meters per Second Squared (m/s^2)"
-        y = "Gals, Galileos (Gal)"
-        unitlist = accellist
-
-    else:
-        x = "Newtons (N)"
-        y = "Atomic Units of Force"
-        unitlist = forcelist
-        
-    dictionary = typedict[gunit]
+    dictionary = typedict[gunit][0]
     default1.set(x)
     unit1 = dictionary[x]
 
-    default2.set(y)
-    var2 = 1 / dictionary[y]
-    unit2 = dictionary[y]    
+    if gunit == "Temperature":
+        default2.set(y)
+        x = 1
+        var2 = eval(dictionary[y])
+        unit2 = dictionary[y]
+
+    else:
+        default2.set(y)
+        var2 = 1 / dictionary[y]
+        unit2 = dictionary[y]    
         
     var1 = 1.0
     
@@ -315,8 +282,9 @@ def changevar(unit):
     omenu2.config(width=32)
     omenu2.grid(column=4, row=5, padx = 2)
 
-    replaceentries(var1, var2)  
-
+    replaceentries(var1, var2)
+    
+# Function that calculates unit conversion
 def calcvar():
     global unit1
     global unit2
@@ -326,6 +294,7 @@ def calcvar():
     global entry2
     
     var1 = float(entry1.get())
+    print(var1)
 
     if gunit == "Temperature":
         x = var1
@@ -333,25 +302,6 @@ def calcvar():
     else:
         var2 = (var1 * unit1) / unit2
         
-    replaceentries(var1, var2)
-
-# Function that calculates unit conversion
-def calculate():
-    global entry1
-    global entry2
-    global unit1
-    global unit2
-    global var1
-    global var2
-    
-    var1 = float(entry1.get())
-
-    if gunit == "Temperature":
-        x = var1
-        var2 = eval(unit2)
-    else:
-        var2 = (var1 * unit1) / unit2
-
     replaceentries(var1, var2)
 
 # Function that changes entry boxes to reflect unit conversions
@@ -371,14 +321,14 @@ def replaceentries(varone, vartwo):
     
     root.update()
 
+# IMPORTANT: THERE IS AN ISSUE WHEN CHANGING TEMPERATURE UNITS HERE
 # Function to change first unit 
 def callback1(selection):
     global unit1
     global gunit
     global uselection1
     uselection1 = selection
-
-    xdict = typedict[gunit]
+    xdict = typedict[gunit][0]
     unit1 = xdict[selection]
     calcvar()
 
@@ -388,8 +338,7 @@ def callback2(selection):
     global gunit
     global uselection2
     uselection2 = selection
-    
-    xdict = typedict[gunit]
+    xdict = typedict[gunit][0]
     unit2 = xdict[selection]
     calcvar()
 
@@ -401,7 +350,7 @@ screen_height = pyautogui.size()[1]
 root = Tk()
 root.geometry("+" + str(int(0.1 * screen_width)) + "+" + str(int(0.2 * screen_height)))
 root.resizable(False, False)
-root.title("ConversionCalculator (v1.9.1)")
+root.title("ConversionCalculator (v1.10.1)")
 imagename = "icons8-weight-90.png"
 image = PhotoImage(file = imagename)
 root.iconphoto(False, image)
@@ -457,7 +406,7 @@ omenu2.config(width=32)
 omenu2.grid(column=4, row=5, padx = 2)
 
 # Define the calculate button
-calcbtt = ttk.Button(frm2, text="Calculate", command=calculate)
+calcbtt = ttk.Button(frm2, text="Calculate", command=calcvar)
 calcbtt.grid(column=1, row=7, pady = 3)
 
 # Define the option menu for selecting unit types
