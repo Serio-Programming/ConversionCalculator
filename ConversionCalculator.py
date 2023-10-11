@@ -1,4 +1,4 @@
-# ConversionCalculator (v1.10.1)
+# ConversionCalculator (v1.11.1)
 # Python 3.9.6
 # A program by Tyler Serio
 # This program converts units to other units
@@ -98,15 +98,15 @@ lengthdict = {
 
 # Temperature units dictionary
 tempdict = {
-    "Degrees Celsius(°C)": "x - 273.15",
+    "Degrees Celsius(°C)": ["x - 273.15", "x + 273.15"],
     #"Degrees Delisle(°De)": "",
     #"Degrees Fahrenheit (°F)": "",
     #"Degrees Newton (°N)": "",
-    "Degrees Rankine (°R)": "x/(5/9)",
+    "Degrees Rankine (°R)": ["x /(5/9)", "x * (5/9)"],
     #"Degrees Réaumur (°Ré)": "",
     #"Degrees Rømer (°Rø)": ,
     #"Regulo Gas Marks (GM)": "",
-    "Kelvins (K)": "x"
+    "Kelvins (K)": ["x", "x"]
     }
 
 # Time units dictionary
@@ -262,8 +262,9 @@ def changevar(unit):
     if gunit == "Temperature":
         default2.set(y)
         x = 1
-        var2 = eval(dictionary[y])
-        unit2 = dictionary[y]
+        var2 = eval(dictionary[y][0])
+        unit1 = unit1[0]
+        unit2 = dictionary[y][0]
 
     else:
         default2.set(y)
@@ -294,10 +295,10 @@ def calcvar():
     global entry2
     
     var1 = float(entry1.get())
-    print(var1)
 
     if gunit == "Temperature":
         x = var1
+        x = eval(unit1)
         var2 = eval(unit2)
     else:
         var2 = (var1 * unit1) / unit2
@@ -321,25 +322,26 @@ def replaceentries(varone, vartwo):
     
     root.update()
 
-# IMPORTANT: THERE IS AN ISSUE WHEN CHANGING TEMPERATURE UNITS HERE
 # Function to change first unit 
 def callback1(selection):
-    global unit1
     global gunit
-    global uselection1
-    uselection1 = selection
+    global unit1
     xdict = typedict[gunit][0]
-    unit1 = xdict[selection]
+    if gunit == "Temperature":
+        unit1 = xdict[selection][1]
+    else:
+        unit1 = xdict[selection]
     calcvar()
 
 # Function to change second unit
 def callback2(selection):
-    global unit2
     global gunit
-    global uselection2
-    uselection2 = selection
+    global unit2
     xdict = typedict[gunit][0]
-    unit2 = xdict[selection]
+    if gunit == "Temperature":
+        unit2 = xdict[selection][0]
+    else:   
+        unit2 = xdict[selection]
     calcvar()
 
 # Get monitor dimensions
@@ -350,7 +352,7 @@ screen_height = pyautogui.size()[1]
 root = Tk()
 root.geometry("+" + str(int(0.1 * screen_width)) + "+" + str(int(0.2 * screen_height)))
 root.resizable(False, False)
-root.title("ConversionCalculator (v1.10.1)")
+root.title("ConversionCalculator (v1.11.1)")
 imagename = "icons8-weight-90.png"
 image = PhotoImage(file = imagename)
 root.iconphoto(False, image)
@@ -367,7 +369,6 @@ var1 = 1.0
 var2 = lengthdict["Meters (m)"] / lengthdict["Inches, International (in)"]
 unit1 = 1
 unit2 = 0.0254
-uselection2 = "Inches, International (in)"
 unitlist = lengthlist
 unitlist = unitlist
 
