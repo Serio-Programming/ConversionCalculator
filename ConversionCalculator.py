@@ -1,4 +1,4 @@
-# ConversionCalculator (v1.11.1)
+# ConversionCalculator (v1.12.1)
 # Python 3.9.6
 # A program by Tyler Serio
 # This program converts units to other units
@@ -26,6 +26,16 @@ acceldict = {
     "Miles per Minute per Second (mpm/s)": 26.8224,
     "Miles per Second Squared (mps^2)": 1609.344,
     "Standard Gravity (g0)": 9.80665
+    }
+
+# Energy units dictionary
+energydict = {
+    "Calories, US;FDA (Cal)": 4184,
+    "Electronvolt (eV)": 0.0000000000000000001602176634,
+    "Joules (J)": 1,
+    "Tonnes of Coal Equivalent (TCE)": 29288000000,
+    "Tonnes of Oil Equivalent (toe)": 41840000000,
+    "Tons of TNT (tTNT)": 4184000000
     }
 
 # Frequency units dictionary
@@ -98,8 +108,8 @@ lengthdict = {
 
 # Temperature units dictionary
 tempdict = {
-    "Degrees Celsius(°C)": ["x - 273.15", "x + 273.15"],
-    #"Degrees Delisle(°De)": "",
+    "Degrees Celsius (°C)": ["x - 273.15", "x + 273.15"],
+    "Degrees Delisle (°De)": ["(373.15 - x) * (3 / 2)", "373.15 - (x * (2 / 3))"],
     #"Degrees Fahrenheit (°F)": "",
     #"Degrees Newton (°N)": "",
     "Degrees Rankine (°R)": ["x /(5/9)", "x * (5/9)"],
@@ -163,60 +173,66 @@ volumedict = {
 #     list.append(str(key))
 
 # Define unit lists from dictionary keys
-# Define Length unit list
-lengthlist = []
-for key in lengthdict.keys():
-    lengthlist.append(str(key))
-
-# Define Volume unit list
-volumelist = []
-for key in volumedict.keys():
-    volumelist.append(str(key))
-
-# Define Mass unit list
-masslist = []
-for key in massdict.keys():
-    masslist.append(str(key))
-
-# Define Time unit list
-timelist = []
-for key in timedict.keys():
-    timelist.append(str(key))
-
-# Define Frequency unit list
-freqlist = []
-for key in freqdict.keys():
-    freqlist.append(str(key))
-
-# Define Temperature unit list
-templist = []
-for key in tempdict.keys():
-    templist.append(str(key))
-
-# Define Information Entropy unit list
-infoenlist = []
-for key in infoendict.keys():
-    infoenlist.append(str(key))
-
 # Define Acceleration unit list
 accellist = []
 for key in acceldict.keys():
     accellist.append(str(key))
+
+# Define Energy unit list
+energylist = []
+for key in energydict.keys():
+    energylist.append(str(key))
 
 # Define Force unit list
 forcelist = []
 for key in forcedict.keys():
     forcelist.append(str(key))
 
+# Define Frequency unit list
+freqlist = []
+for key in freqdict.keys():
+    freqlist.append(str(key))
+
+# Define Information Entropy unit list
+infoenlist = []
+for key in infoendict.keys():
+    infoenlist.append(str(key))
+    
+# Define Length unit list
+lengthlist = []
+for key in lengthdict.keys():
+    lengthlist.append(str(key))
+
+# Define Mass unit list
+masslist = []
+for key in massdict.keys():
+    masslist.append(str(key))
+
+# Define Temperature unit list
+templist = []
+for key in tempdict.keys():
+    templist.append(str(key))
+
+# Define Time unit list
+timelist = []
+for key in timedict.keys():
+    timelist.append(str(key))
+
+# Define Volume unit list
+volumelist = []
+for key in volumedict.keys():
+    volumelist.append(str(key))
+
 # Unit type dictionary
 typedict = {
     "Acceleration": [acceldict, accellist, "Meters per Second Squared (m/s^2)", "Gals, Galileos (Gal)"],
+    "Energy": [energydict, energylist, "Joules (J)", "Calories, US;FDA (Cal)"],
     "Force": [forcedict, forcelist, "Newtons (N)", "Atomic Units of Force"],
     "Frequency": [freqdict, freqlist, "Hertz (Hz)", "Actions per Minute (APM)"],
     "Information Entropy": [infoendict, infoenlist, "Bits (b)", "Bytes (B)"],
     "Length": [lengthdict, lengthlist, "Meters (m)", "Inches, International (in)"],
     "Mass": [massdict, masslist, "Kilograms (kg)", "Pounds, Avoirdupois (lb av)"],
-    "Temperature": [tempdict, templist, "Kelvins (K)", "Degrees Celsius(°C)"],
+    "Temperature": [tempdict, templist, "Kelvins (K)", "Degrees Celsius (°C)"],
     "Time": [timedict, timelist, "Seconds (s)", "Jiffies (j)"],
     "Volume": [volumedict, volumelist, "Cubic Meters (m^3)", "Cubic Yards (yd^3)"]
     }
@@ -352,7 +368,7 @@ screen_height = pyautogui.size()[1]
 root = Tk()
 root.geometry("+" + str(int(0.1 * screen_width)) + "+" + str(int(0.2 * screen_height)))
 root.resizable(False, False)
-root.title("ConversionCalculator (v1.11.1)")
+root.title("ConversionCalculator (v1.12.1)")
 imagename = "icons8-weight-90.png"
 image = PhotoImage(file = imagename)
 root.iconphoto(False, image)
