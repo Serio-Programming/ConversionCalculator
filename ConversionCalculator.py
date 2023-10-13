@@ -1,4 +1,4 @@
-# ConversionCalculator (v1.12.1)
+# ConversionCalculator (v1.13.1)
 # Python 3.9.6
 # A program by Tyler Serio
 # This program converts units to other units
@@ -165,63 +165,24 @@ volumedict = {
     "Petroleum Barrels, Archaic Blue-Barrels": 0.158987294928
     }
 
-# Maybe add something list this later:
-# listlist = [lengthlist, volumelist, etc.]
-# for list in listlist:
-#     list = []
-#     for key in listdict.keys():
-#     list.append(str(key))
-
 # Define unit lists from dictionary keys
-# Define Acceleration unit list
 accellist = []
-for key in acceldict.keys():
-    accellist.append(str(key))
-
-# Define Energy unit list
 energylist = []
-for key in energydict.keys():
-    energylist.append(str(key))
-
-# Define Force unit list
 forcelist = []
-for key in forcedict.keys():
-    forcelist.append(str(key))
-
-# Define Frequency unit list
 freqlist = []
-for key in freqdict.keys():
-    freqlist.append(str(key))
-
-# Define Information Entropy unit list
 infoenlist = []
-for key in infoendict.keys():
-    infoenlist.append(str(key))
-    
-# Define Length unit list
 lengthlist = []
-for key in lengthdict.keys():
-    lengthlist.append(str(key))
-
-# Define Mass unit list
 masslist = []
-for key in massdict.keys():
-    masslist.append(str(key))
-
-# Define Temperature unit list
 templist = []
-for key in tempdict.keys():
-    templist.append(str(key))
-
-# Define Time unit list
 timelist = []
-for key in timedict.keys():
-    timelist.append(str(key))
-
-# Define Volume unit list
 volumelist = []
-for key in volumedict.keys():
-    volumelist.append(str(key))
+listoflists = [accellist, energylist, forcelist, freqlist, infoenlist, lengthlist, templist, timelist, masslist, volumelist]
+listofdicts = [acceldict, energydict, freqdict, forcedict, infoendict, lengthdict, tempdict, timedict, massdict, volumedict]
+xdict = -1
+for xlist in listoflists:
+    xdict += 1
+    for key in listofdicts[xdict].keys():
+        xlist.append(str(key))
 
 # Unit type dictionary
 typedict = {
@@ -255,8 +216,6 @@ def changevar(unit):
     global omenu2
     global var1
     global var2
-    global entry1
-    global entry2
     global unit1
     global unit2
     gunit = unit
@@ -303,12 +262,8 @@ def changevar(unit):
     
 # Function that calculates unit conversion
 def calcvar():
-    global unit1
-    global unit2
     global var1
     global var2
-    global entry1
-    global entry2
     
     var1 = float(entry1.get())
 
@@ -340,7 +295,6 @@ def replaceentries(varone, vartwo):
 
 # Function to change first unit 
 def callback1(selection):
-    global gunit
     global unit1
     xdict = typedict[gunit][0]
     if gunit == "Temperature":
@@ -351,7 +305,6 @@ def callback1(selection):
 
 # Function to change second unit
 def callback2(selection):
-    global gunit
     global unit2
     xdict = typedict[gunit][0]
     if gunit == "Temperature":
@@ -368,7 +321,7 @@ screen_height = pyautogui.size()[1]
 root = Tk()
 root.geometry("+" + str(int(0.1 * screen_width)) + "+" + str(int(0.2 * screen_height)))
 root.resizable(False, False)
-root.title("ConversionCalculator (v1.12.1)")
+root.title("ConversionCalculator (v1.13.1)")
 imagename = "icons8-weight-90.png"
 image = PhotoImage(file = imagename)
 root.iconphoto(False, image)
