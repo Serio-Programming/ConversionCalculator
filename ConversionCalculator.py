@@ -1,4 +1,4 @@
-# ConversionCalculator (v1.13.1)
+# ConversionCalculator (v1.14.1)
 # Python 3.9.6
 # A program by Tyler Serio
 # This program converts units to other units
@@ -17,7 +17,7 @@ acceldict = {
     "Feet per Hour per Second (fph/s)": 0.000084666666,
     "Feet per Minute per Second (fpm/s)": 0.00508,
     "Feet per Second Squared (fps^2)": 0.3048,
-    "Gals, Galileos (Gal)": .01,
+    "Gals, Galileos (Gal)": 0.01,
     "Inches per Minute per Second (ipm/s)": 0.00042333333,
     "Inches per Second Squared (ips^2)": 0.0254,
     #"Knots per Second (kn/s)": ,
@@ -26,6 +26,21 @@ acceldict = {
     "Miles per Minute per Second (mpm/s)": 26.8224,
     "Miles per Second Squared (mps^2)": 1609.344,
     "Standard Gravity (g0)": 9.80665
+    }
+# Density units dictionary
+densitydict = {
+    "Grams per Mililiter (g/mL)": 1000,
+    "Kilograms per Cubic Meter (kg/m^3)": 1,
+    "Kilograms per Liter (kg/L)": 1000,
+    "Avoirdupois Ounces per Cubic Foot (oz/ft^3)": 1.001153961,
+    "Avoirdupois Ounces per Cubic Inch (oz/in^3)": 1.729994044,
+    "Avoirdupois Ounces per Imperial Gallon (oz/gal)":  6.236023291,
+    "Avoirdupois Ounces per US Fluid Gallon (oz/gal)": 7.489151707,
+    "Avoirdupois Pounds per Foot (lb/ft^3)": 16.01846337,
+    "Avoirdupois Pounds per Inch (lb/in^3)":  2.767990471,
+    "Avoirdupois Pounds per Imperial Gallon (lb/gal)": 99.77637266,
+    "Avoirdupois Pounds per US Fluid Gallon (lb/gal)": 119.8264273,
+    "Slugs per Cubic Foot (slug/ft^3)": 515.3788184
     }
 
 # Energy units dictionary
@@ -53,7 +68,7 @@ forcedict = {
     "Atomic Units of Force": 0.0000000823872206,
     "Dynes, CGS Unit (dyn)": 0.00001,
     #"Kilogram-Force, Kiloponds, Grave-Force (kgf; kp; gvf)": ,
-    #"Kips, Kip-Force (kip; kipf; klbf)": ,
+    "Kips, Kip-Force (kip; kipf; klbf)":  4448.2216152605,
     #"Milligrave-Force, Gravet-Force (mgvf; gvtf)": 0.00980665,
     "Long Tons-Force (tnf)": 9964.01641818352,
     "Newtons (N)": 1,
@@ -68,8 +83,6 @@ forcedict = {
 infoendict = {
     "Bits (b)": 1,
     "Bytes (B)": 8,
-    #"Hartley; Ban (Hart; ban)": ,
-    #"Natural Unit of Information; Nit; Nepit (nat)": ,
     "Nibbles": 4,
     "Kilobytes (kB)": 8000,
     "Kibibytes (Kib)": 8192,
@@ -167,6 +180,7 @@ volumedict = {
 
 # Define unit lists from dictionary keys
 accellist = []
+densitylist = []
 energylist = []
 forcelist = []
 freqlist = []
@@ -176,8 +190,8 @@ masslist = []
 templist = []
 timelist = []
 volumelist = []
-listoflists = [accellist, energylist, forcelist, freqlist, infoenlist, lengthlist, templist, timelist, masslist, volumelist]
-listofdicts = [acceldict, energydict, freqdict, forcedict, infoendict, lengthdict, tempdict, timedict, massdict, volumedict]
+listoflists = [accellist, densitylist, energylist, forcelist, freqlist, infoenlist, lengthlist, templist, timelist, masslist, volumelist]
+listofdicts = [acceldict, densitydict, energydict, freqdict, forcedict, infoendict, lengthdict, tempdict, timedict, massdict, volumedict]
 xdict = -1
 for xlist in listoflists:
     xdict += 1
@@ -187,6 +201,7 @@ for xlist in listoflists:
 # Unit type dictionary
 typedict = {
     "Acceleration": [acceldict, accellist, "Meters per Second Squared (m/s^2)", "Gals, Galileos (Gal)"],
+    "Density": [densitydict, densitylist, "Kilograms per Cubic Meter (kg/m^3)", "Grams per Mililiter (g/mL)"],
     "Energy": [energydict, energylist, "Joules (J)", "Calories, US;FDA (Cal)"],
     "Force": [forcedict, forcelist, "Newtons (N)", "Atomic Units of Force"],
     "Frequency": [freqdict, freqlist, "Hertz (Hz)", "Actions per Minute (APM)"],
@@ -250,12 +265,12 @@ def changevar(unit):
     
     omenu1.destroy()
     omenu1 = OptionMenu(frm, default1, *unitlist, command=callback1)
-    omenu1.config(width=32)
+    omenu1.config(width=42)
     omenu1.grid(column=1, row=5, padx = 2)
     
     omenu2.destroy()
     omenu2 = OptionMenu(frm, default2, *unitlist, command=callback2)
-    omenu2.config(width=32)
+    omenu2.config(width=42)
     omenu2.grid(column=4, row=5, padx = 2)
 
     replaceentries(var1, var2)
@@ -321,7 +336,7 @@ screen_height = pyautogui.size()[1]
 root = Tk()
 root.geometry("+" + str(int(0.1 * screen_width)) + "+" + str(int(0.2 * screen_height)))
 root.resizable(False, False)
-root.title("ConversionCalculator (v1.13.1)")
+root.title("ConversionCalculator (v1.14.1)")
 imagename = "icons8-weight-90.png"
 image = PhotoImage(file = imagename)
 root.iconphoto(False, image)
@@ -333,23 +348,23 @@ frm.grid()
 frm2.grid()
     
 # Define first unit for conversion
-gunit = "Length"
+gunit = "Acceleration"
 var1 = 1.0
-var2 = lengthdict["Meters (m)"] / lengthdict["Inches, International (in)"]
+var2 = acceldict["Meters per Second Squared (m/s^2)"] / acceldict["Gals, Galileos (Gal)"]
 unit1 = 1
-unit2 = 0.0254
-unitlist = lengthlist
+unit2 = .01
+unitlist = accellist
 unitlist = unitlist
 
 # Set default selections for the options menus
 default1 = StringVar(frm)
-default1.set("Meters (m)")
+default1.set("Meters per Second Squared (m/s^2)")
 
 default2 = StringVar(frm)
-default2.set("Inches, International (in)")
+default2.set("Gals, Galileos (Gal)")
 
 default3 = StringVar(frm2)
-default3.set("Length")
+default3.set("Acceleration")
 
 # Define first entry for number of units
 entry1 = ttk.Entry(frm, width=24)
@@ -358,7 +373,7 @@ entry1.grid(column=0, row=5, padx = 2)
 
 # Define the first option menu for choosing conversion units
 omenu1 = OptionMenu(frm, default1, *unitlist, command=callback1)
-omenu1.config(width=32)
+omenu1.config(width=42)
 omenu1.grid(column=1, row=5, padx = 2)
 
 # Define label to aid in understanding of unit conversion
@@ -372,7 +387,7 @@ entry2.grid(column=3, row=5, padx = 2)
 
 # Define the second option menu for choosing conversion units
 omenu2 = OptionMenu(frm, default2, *unitlist, command=callback2)
-omenu2.config(width=32)
+omenu2.config(width=42)
 omenu2.grid(column=4, row=5, padx = 2)
 
 # Define the calculate button
