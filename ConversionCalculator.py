@@ -1,4 +1,4 @@
-# ConversionCalculator (v1.14.1)
+# ConversionCalculator (v1.15.1)
 # Python 3.9.6
 # A program by Tyler Serio
 # This program converts units to other units
@@ -48,6 +48,8 @@ energydict = {
     "Calories, US;FDA (Cal)": 4184,
     "Electronvolt (eV)": 0.0000000000000000001602176634,
     "Joules (J)": 1,
+    "Kilocalories, Large Calories (kcal; Cal)": 4186.8,
+    "Quads": 1055055852620000000,
     "Tonnes of Coal Equivalent (TCE)": 29288000000,
     "Tonnes of Oil Equivalent (toe)": 41840000000,
     "Tons of TNT (tTNT)": 4184000000
@@ -94,6 +96,8 @@ lengthdict = {
     "Ångströms (Å)": .0000000001,
     "Astronomical Units (au)": 149597870700,
     "Attometers (am)": 0.000000000000000001,
+    "Barelycorns, H": 0.00846,
+    "Cable Lengths, Imperial": 185.3184,
     "Cable Lengths, International": 185.2,
     "Centimeters (cm)": 0.01,
     "Decameters (dam)": 10,
@@ -113,10 +117,17 @@ lengthdict = {
     "Millimeters (mm)": 0.001,
     "Nanometers (nm)": 0.000000001,
     "Nautical Miles, International (nmi)": 1852,
+    "Paces": 0.762,
+    "Palms": 0.0762,
     "Picometers (pm)": 0.000000000001,
     "Scandinavian Miles (mil)": 10000,
+    "Spans, H": 0.2286,
     "Spats":1000000000000,
-    "Yards, International (yd)": 0.9144 
+    "Sticks, H": 0.0508,
+    "Twips (twp)": 0.00001763888888,
+    "Yards, International (yd)": 0.9144,
+    "Yoctommeters (ym)": 0.000000000000000000000001,
+    "Zeptometers (zm)": 0.000000000000000000001
     }
 
 # Temperature units dictionary
@@ -336,7 +347,7 @@ screen_height = pyautogui.size()[1]
 root = Tk()
 root.geometry("+" + str(int(0.1 * screen_width)) + "+" + str(int(0.2 * screen_height)))
 root.resizable(False, False)
-root.title("ConversionCalculator (v1.14.1)")
+root.title("ConversionCalculator (v1.15.1)")
 imagename = "icons8-weight-90.png"
 image = PhotoImage(file = imagename)
 root.iconphoto(False, image)
