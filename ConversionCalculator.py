@@ -1,4 +1,4 @@
-# ConversionCalculator (v1.15.1)
+# ConversionCalculator (v1.16.1)
 # Python 3.9.6
 # A program by Tyler Serio
 # This program converts units to other units
@@ -27,6 +27,19 @@ acceldict = {
     "Miles per Second Squared (mps^2)": 1609.344,
     "Standard Gravity (g0)": 9.80665
     }
+
+# Alcohol units dictionary
+# Drink responsibly
+alcoholdict = {
+    "10mls or 8gs of Pure Alcohol": 1,
+    "440ml Cans of ABV 5.5% Lager/Beer/Cider": 2.4,
+    "Units of Alcohol": 1,
+    "Pints of ABV 3.6% Lager/Beer/Cider": 2,
+    "Pints of ABV 5.2% Lager/Beer/Cider": 3,
+    "British Weekly Recommended Limit": 14,
+    "25ml Single Small Shots of Spirits, ABV 40%": 1
+    }
+
 # Density units dictionary
 densitydict = {
     "Grams per Mililiter (g/mL)": 1000,
@@ -191,6 +204,7 @@ volumedict = {
 
 # Define unit lists from dictionary keys
 accellist = []
+alcohollist = []
 densitylist = []
 energylist = []
 forcelist = []
@@ -201,8 +215,8 @@ masslist = []
 templist = []
 timelist = []
 volumelist = []
-listoflists = [accellist, densitylist, energylist, forcelist, freqlist, infoenlist, lengthlist, templist, timelist, masslist, volumelist]
-listofdicts = [acceldict, densitydict, energydict, freqdict, forcedict, infoendict, lengthdict, tempdict, timedict, massdict, volumedict]
+listoflists = [accellist, alcohollist, densitylist, energylist, forcelist, freqlist, infoenlist, lengthlist, templist, timelist, masslist, volumelist]
+listofdicts = [acceldict, alcoholdict, densitydict, energydict, freqdict, forcedict, infoendict, lengthdict, tempdict, timedict, massdict, volumedict]
 xdict = -1
 for xlist in listoflists:
     xdict += 1
@@ -212,6 +226,7 @@ for xlist in listoflists:
 # Unit type dictionary
 typedict = {
     "Acceleration": [acceldict, accellist, "Meters per Second Squared (m/s^2)", "Gals, Galileos (Gal)"],
+    "Alcohol": [alcoholdict, alcohollist, "Units of Alcohol", "10mls or 8gs of Pure Alcohol"],
     "Density": [densitydict, densitylist, "Kilograms per Cubic Meter (kg/m^3)", "Grams per Mililiter (g/mL)"],
     "Energy": [energydict, energylist, "Joules (J)", "Calories, US;FDA (Cal)"],
     "Force": [forcedict, forcelist, "Newtons (N)", "Atomic Units of Force"],
@@ -347,7 +362,7 @@ screen_height = pyautogui.size()[1]
 root = Tk()
 root.geometry("+" + str(int(0.1 * screen_width)) + "+" + str(int(0.2 * screen_height)))
 root.resizable(False, False)
-root.title("ConversionCalculator (v1.15.1)")
+root.title("ConversionCalculator (v1.16.1)")
 imagename = "icons8-weight-90.png"
 image = PhotoImage(file = imagename)
 root.iconphoto(False, image)
