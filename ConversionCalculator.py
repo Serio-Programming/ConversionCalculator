@@ -1,4 +1,4 @@
-# ConversionCalculator (v1.16.1)
+# ConversionCalculator (v1.17.1)
 # Python 3.9.6
 # A program by Tyler Serio
 # This program converts units to other units
@@ -115,8 +115,11 @@ lengthdict = {
     "Centimeters (cm)": 0.01,
     "Decameters (dam)": 10,
     "Decimeters (dm)": 0.1,
+    "Ells, H (ell)": 1.143,
+    "Fathoms (ftm)": 1.8288,
     "Feet, International (ft)": 0.3048,
     "Femtometers (fm)": 0.000000000000001,
+    "Fingers": 0.022225,
     "Hectometers (hm)": 100,
     "Inches, International (in)": 0.0254,
     "Kilometers (km)": 1000,
@@ -124,6 +127,7 @@ lengthdict = {
     "Light-Hours": 1079252848800,
     "Light-Seconds": 299792458,
     "Light-Years": 9460730472580800,
+    "Lines (ln)": 0.0021166666,
     "Meters (m)": 1,
     "Micrometers, Microns (μm)": 0.000001,
     "Miles, Internaional (mi)": 1609.344,
@@ -132,7 +136,9 @@ lengthdict = {
     "Nautical Miles, International (nmi)": 1852,
     "Paces": 0.762,
     "Palms": 0.0762,
+    "Parsecs (pc)": 30856775814913700,
     "Picometers (pm)": 0.000000000001,
+    "Quarters": 0.2286,
     "Scandinavian Miles (mil)": 10000,
     "Spans, H": 0.2286,
     "Spats":1000000000000,
@@ -362,7 +368,7 @@ screen_height = pyautogui.size()[1]
 root = Tk()
 root.geometry("+" + str(int(0.1 * screen_width)) + "+" + str(int(0.2 * screen_height)))
 root.resizable(False, False)
-root.title("ConversionCalculator (v1.16.1)")
+root.title("ConversionCalculator (v1.17.1)")
 imagename = "icons8-weight-90.png"
 image = PhotoImage(file = imagename)
 root.iconphoto(False, image)
