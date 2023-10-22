@@ -1,4 +1,4 @@
-# ConversionCalculator (v1.17.1)
+# ConversionCalculator (v1.18.1)
 # Python 3.9.6
 # A program by Tyler Serio
 # This program converts units to other units
@@ -168,10 +168,16 @@ timedict = {
     "Hours (h)": 3600,
     "Jiffies (j)": 1/60,
     "Jiffies, Alternative (ja)": 0.01,
+    "Kès, Quarters of an Hour": 900,
+    "Kès, Traditional": 864,
     "Millenniums": 31536000000,
+    "Millidays (md)": 86.4,
     "Minutes (min)": 60,
     "Moments": 90,
     "Seconds (s)": 1,
+    "Shakes": 0.00000001,
+    "Sigmas": 0.000001,
+    "Svedbergs": 0.0000000000001,
     "Weeks (wk)": 604800,
     "Years, Common (y)": 31536000
     }
@@ -368,7 +374,7 @@ screen_height = pyautogui.size()[1]
 root = Tk()
 root.geometry("+" + str(int(0.1 * screen_width)) + "+" + str(int(0.2 * screen_height)))
 root.resizable(False, False)
-root.title("ConversionCalculator (v1.17.1)")
+root.title("ConversionCalculator (v1.18.1)")
 imagename = "icons8-weight-90.png"
 image = PhotoImage(file = imagename)
 root.iconphoto(False, image)
