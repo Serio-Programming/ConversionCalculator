@@ -1,4 +1,4 @@
-# ConversionCalculator (v1.18.1)
+# ConversionCalculator (v1.19.1)
 # Python 3.9.6
 # A program by Tyler Serio
 # This program converts units to other units
@@ -264,9 +264,11 @@ def changevar(unit):
     global gunit
     global default1
     global default2
+    global default3
     global unitlist
     global omenu1
     global omenu2
+    global omenu3
     global var1
     global var2
     global unit1
@@ -275,9 +277,15 @@ def changevar(unit):
 
     if gunit == "[Exit]":
         exit()
-    
+
+    # Help menu pops up when option selected
     if gunit == "[Help Menu]":
-        return        
+        helpbox()
+        gunit = "Acceleration"
+        omenu3.destroy()
+        default3.set("Acceleration")
+        omenu3 = OptionMenu(frm2,  default3, *typelist, command=changevar)
+        omenu3.grid(column=2, row=7, pady = 3)
 
     unitlist = typedict[gunit][1]
     x = typedict[gunit][2]
@@ -366,6 +374,21 @@ def callback2(selection):
         unit2 = xdict[selection]
     calcvar()
 
+# Create a window for the help menu
+def helpbox():
+    helpbox = Toplevel(root)
+    helpbox.geometry("+" + str(int(0.1 * screen_width)) + "+" + str(int(0.2 * screen_height)))
+    root.resizable(False, False)
+    helpbox.focus_set()
+    helpbox.grab_set()
+    helpbox.title("Help!")
+    imagename = "icons8-weight-90.png"
+    image = PhotoImage(file = imagename)
+    root.iconphoto(False, image)
+    frm = ttk.Frame(helpbox, padding=5)
+    frm.grid()
+    ttk.Label(frm, text="This is the help menu... Currently you are on your own!").grid(column=0, row=0)
+
 # Get monitor dimensions
 screen_width = pyautogui.size()[0]
 screen_height = pyautogui.size()[1]
@@ -374,7 +397,7 @@ screen_height = pyautogui.size()[1]
 root = Tk()
 root.geometry("+" + str(int(0.1 * screen_width)) + "+" + str(int(0.2 * screen_height)))
 root.resizable(False, False)
-root.title("ConversionCalculator (v1.18.1)")
+root.title("ConversionCalculator (v1.19.1)")
 imagename = "icons8-weight-90.png"
 image = PhotoImage(file = imagename)
 root.iconphoto(False, image)
